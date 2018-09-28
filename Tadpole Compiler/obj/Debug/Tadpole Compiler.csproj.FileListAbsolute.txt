@@ -1,0 +1,10 @@
+C:\Users\HP\Documents\Tadpole\Tadpole Compiler\bin\Debug\Tadpole_Compiler.exe.config
+C:\Users\HP\Documents\Tadpole\Tadpole Compiler\bin\Debug\Tadpole_Compiler.exe
+C:\Users\HP\Documents\Tadpole\Tadpole Compiler\bin\Debug\Tadpole_Compiler.pdb
+C:\Users\HP\Documents\Tadpole\Tadpole Compiler\obj\Debug\Tadpole Compiler.csprojAssemblyReference.cache
+C:\Users\HP\Documents\Tadpole\Tadpole Compiler\obj\Debug\Tadpole_Compiler.Compiler.resources
+C:\Users\HP\Documents\Tadpole\Tadpole Compiler\obj\Debug\Tadpole_Compiler.Properties.Resources.resources
+C:\Users\HP\Documents\Tadpole\Tadpole Compiler\obj\Debug\Tadpole Compiler.csproj.GenerateResource.cache
+C:\Users\HP\Documents\Tadpole\Tadpole Compiler\obj\Debug\Tadpole Compiler.csproj.CoreCompileInputs.cache
+C:\Users\HP\Documents\Tadpole\Tadpole Compiler\obj\Debug\Tadpole_Compiler.exe
+C:\Users\HP\Documents\Tadpole\Tadpole Compiler\obj\Debug\Tadpole_Compiler.pdb
