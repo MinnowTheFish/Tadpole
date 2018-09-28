@@ -19,30 +19,56 @@ namespace Tadpole_Compiler
         }
 
         string[] fileContents;
+        string[] projectFile;
+        string[] tpfFiles;
+        string[] tpsFiles;
+        string[] tpfdesignerFiles;
+        string[] references;
+        string outputType;
+        string assemblyName;
+        string targetVersion;
 
-        public void convertFile(string directory, string type)
+        public void convertFile(string directory)
         {
             fileContents = File.ReadAllLines(directory);
-            switch (type)
+            string Namespace;
+            for (int line = 0; line < fileContents.Length; line++)
             {
-                case "ProjectFile":
-                    for (int line = 0; line < fileContents.Length; line++)
-                    {
-                        fileContents[line] = fileContents[line].Replace(" ", "").Replace("project{", "");
-                        shift();
+                fileContents[line] = fileContents[line].Replace(" ", "").Replace("project{", "");
+                shift(); //Shifts the array 1 to the left Eg. entry 0 becomes 1, 1 becomes 2 etc...
 
-                        if (fileContents[line].Contains(""))
-                        {
-
-                        }
-                    }
-                    break;
-                case "Form":
-                    break;
-                case "Form Designer":
-                    break;
-                case "Script":
-                    break;
+                if (fileContents[line].Contains("Namespace"))
+                {
+                    Namespace = fileContents[line].Replace("Namespace=\"", "").Replace("\";", "");
+                }
+                else if (fileContents[line].Contains("OutputType"))
+                {
+                    outputType = fileContents[line].Replace("OutputType=\"", "").Replace("\";", "");
+                }
+                else if (fileContents[line].Contains("AssemblyName"))
+                {
+                    assemblyName = fileContents[line].Replace("AssemblyName=\"", "").Replace("\";", "");
+                }
+                else if (fileContents[line].Contains("TargetFramework"))
+                {
+                    targetVersion = fileContents[line].Replace("TargetFramework=\"", "").Replace("\";", "");
+                }
+                else if (fileContents[line].Contains("include") && fileContents[line].Contains("tps"))
+                {
+                    tpsFiles[tpsFiles.Length] = fileContents[line].Replace("include\"", "").Replace("\";", "");
+                }
+                else if (fileContents[line].Contains("include") && fileContents[line].Contains("tpf"))
+                {
+                    tpfFiles[tpfFiles.Length] = fileContents[line].Replace("include\"", "").Replace("\";", "");
+                }
+                else if (fileContents[line].Contains("include") && fileContents[line].Contains("tpfdesigner"))
+                {
+                    tpfdesignerFiles[tpfdesignerFiles.Length] = fileContents[line].Replace("include\"", "").Replace("\";", "");
+                }
+                else if (fileContents[line].Contains("Reference"))
+                {
+                    references[references.Length] = fileContents[line].Replace("Reference\"", "").Replace("\";", "");
+                }
             }
         }
 
@@ -50,7 +76,7 @@ namespace Tadpole_Compiler
         {
             if (chooseFileDialog.ShowDialog() == DialogResult.OK)
             {
-                convertFile(chooseFileDialog.FileName, "ProjectFile");
+                convertFile(chooseFileDialog.FileName);
             }
         }
 
