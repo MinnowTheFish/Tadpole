@@ -17,16 +17,26 @@ namespace Tadpole_Compiler
             InitializeComponent();
         }
 
-        public void convertFile(string directory)
+        public void convertFile(string directory, string type)
         {
-
+            switch (type)
+            {
+                case "ProjectFile":
+                    break;
+                case "Form":
+                    break;
+                case "Form Designer":
+                    break;
+                case "Script":
+                    break;
+            }
         }
 
         private void compileCodeClick(object sender, EventArgs e)
         {
             if (chooseFileDialog.ShowDialog() == DialogResult.OK)
             {
-                
+                convertFile(chooseFileDialog.FileName, "ProjectFile");
             }
         }
     }
