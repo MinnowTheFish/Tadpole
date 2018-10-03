@@ -45,7 +45,6 @@
             // 
             // chooseFileDialog
             // 
-            this.chooseFileDialog.FileName = "chooseFileDialog";
             this.chooseFileDialog.Title = "Choose Tadpole Project";
             // 
             // Compiler

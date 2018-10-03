@@ -18,10 +18,6 @@ namespace Tadpole_Compiler
             InitializeComponent();
         }
 
-        string outputType;
-        string assemblyName;
-        string targetVersion;
-        string Namespace;
         string[] projectFileP1 = File.ReadAllLines(Environment.CurrentDirectory + "\\Files\\pAP1"); //Basic information (namepace etc.)
         string[] projectFileP2 = File.ReadAllLines(Environment.CurrentDirectory + "\\Files\\pAP2"); //Including files in build
         string[] projectFileP3 = File.ReadAllLines(Environment.CurrentDirectory + "\\Files\\pAP3"); //Referencing '.dll's and other files
@@ -43,6 +39,11 @@ namespace Tadpole_Compiler
         int pAP2Length = 2;
         int pAP3Length = 3;
         int pAP4Length = 3;
+        string outputType;
+        string assemblyName;
+        string targetVersion;
+        string Namespace;
+        string directory;
 
         public void convertFile(string directory)
         {
@@ -74,11 +75,11 @@ namespace Tadpole_Compiler
             {
                 if (fileContents[line] != null)
                 {
-                    string currentLine = fileContents[line];
-                    char tab = '\u0009';
-                    currentLine = currentLine.Replace(tab.ToString(), "").Replace(" ", "").Replace("\";", "").Replace("=\"", "");
+                    string currentLine = fileContents[line]; //Setting 'currentLine' to the line of the file that the for loop is on
+                    char tab = '\u0009'; //Setting the variable 'tab' to the tab character
+                    currentLine = currentLine.Replace(tab.ToString(), "").Replace(" ", "").Replace("\";", "").Replace("=\"", ""); //Removing Tabs, Spaces, `";` and `="`
                     
-                    #region If Statements
+                    #region Getting Information from .tsproject
                     if (currentLine.Contains("Namespace"))
                     {
                         Namespace = currentLine.Replace("Namespace", "");
@@ -135,37 +136,36 @@ namespace Tadpole_Compiler
 
             if (tpfFilesPos != 0)
             {
-                for (int index = 0; index < tpfFilesPos; index++)
+                for (int index = 0; index < tpfFilesPos; index++) //For each tpf file there is
                 {
-                    projectFileWP2[pAP2Length + index] = "<Compile Include=\"" + tpfFiles[index].Replace(".tpf", ".cs") + "\"><SubType>Form</SubType></Compile>";
+                    projectFileWP2[pAP2Length + index] = "<Compile Include=\"" + tpfFiles[index].Replace(".tpf", ".cs") + "\"><SubType>Form</SubType></Compile>"; //Converting it to XML
                     pAP2Length++;
                 }
             }
-
-            MessageBox.Show("" + tpfDesignerFilesPos);
+            
             if (tpfDesignerFilesPos != 0)
             {
-                for (int index = 0; index < tpfDesignerFilesPos; index++)
+                for (int index = 0; index < tpfDesignerFilesPos; index++) //For each tpfDesigner file there is
                 {
-                    projectFileWP2[pAP2Length + index] = "<Compile Include=\"" + tpfdesignerFiles[index].Replace(".tpfdesigner", ".Designer.cs") + "\"><DependentUpon>" + tpfFiles[index].Replace(".tpf", ".cs") + "</DependentUpon></Compile>";
+                    projectFileWP2[pAP2Length + index] = "<Compile Include=\"" + tpfdesignerFiles[index].Replace(".tpfdesigner", ".Designer.cs") + "\"><DependentUpon>" + tpfFiles[index].Replace(".tpf", ".cs") + "</DependentUpon></Compile>"; //Converting it to XML
                     pAP2Length++;
                 }
             }
 
             if (tpsFilesPos != 0)
             {
-                for (int index = 0; index < tpsFilesPos; index++)
+                for (int index = 0; index < tpsFilesPos; index++) //For each tps file there is
                 {
-                    projectFileWP2[pAP2Length + index] = "<Compile Include=\"" + tpsFiles[index].Replace(".tps", ".cs") + "\" />";
+                    projectFileWP2[pAP2Length + index] = "<Compile Include=\"" + tpsFiles[index].Replace(".tps", ".cs") + "\" />"; //Converting it to XML
                     pAP2Length++;
                 }
             }
 
             if (referencesPos != 0)
             {
-                for (int index = 0; index < referencesPos; index++)
+                for (int index = 0; index < referencesPos; index++) //For each reference there is
                 {
-                    projectFileWP3[pAP3Length + index] = "<Content Include=\"" + references[index] + "\" />";
+                    projectFileWP3[pAP3Length + index] = "<Content Include=\"" + references[index] + "\" />"; //Converting it to XML
                     pAP3Length++;
                 }
             }
@@ -212,17 +212,17 @@ namespace Tadpole_Compiler
                 }
             }
 
-            projectFileWP1[7] = "<OutputType>" + outputType + "</OutputType>";
-            projectFileWP1[8] = "<RootNamespace>" + Namespace + "</RootNamespace>";
-            projectFileWP1[9] = "<AssemblyName>" + assemblyName + "</AssemblyName>";
-            projectFileWP1[10] = "<TargetFrameworkVersion>" + targetVersion + "</TargetFrameworkVersion>";
+            projectFileWP1[7] = "<OutputType>" + outputType + "</OutputType>"; //Converting the Output Type to XML
+            projectFileWP1[8] = "<RootNamespace>" + Namespace + "</RootNamespace>"; //Converting the Namespace to XML
+            projectFileWP1[9] = "<AssemblyName>" + assemblyName + "</AssemblyName>"; //Converting the Assembly Name to XML
+            projectFileWP1[10] = "<TargetFrameworkVersion>" + targetVersion + "</TargetFrameworkVersion>"; //Converting the Targetted Framework Version to XML
 
-            projectFileWP1 = projectFileWP1.Where(x => !string.IsNullOrEmpty(x)).ToArray();
+            projectFileWP1 = projectFileWP1.Where(x => !string.IsNullOrEmpty(x)).ToArray(); //Removing blank entries of the array
             projectFileWP2 = projectFileWP2.Where(x => !string.IsNullOrEmpty(x)).ToArray();
             projectFileWP3 = projectFileWP3.Where(x => !string.IsNullOrEmpty(x)).ToArray();
             projectFileWP4 = projectFileWP4.Where(x => !string.IsNullOrEmpty(x)).ToArray();
 
-            string csProject = Environment.CurrentDirectory + "\\" + assemblyName + ".csproj";
+            string csProject = directory + "\\" + assemblyName + ".csproj";
             File.WriteAllLines(csProject, projectFileWP1);
             File.AppendAllLines(csProject, projectFileWP2);
             File.AppendAllLines(csProject, projectFileWP3);
@@ -234,6 +234,7 @@ namespace Tadpole_Compiler
             if (chooseFileDialog.ShowDialog() == DialogResult.OK)
             {
                 convertFile(chooseFileDialog.FileName);
+                directory = Path.GetDirectoryName(chooseFileDialog.FileName);
             }
         }
 
